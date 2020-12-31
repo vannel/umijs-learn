@@ -1,5 +1,5 @@
 import { Reducer, Effect, Subscription } from 'umi';
-import { query } from './service';
+import { query, save, remove } from './service';
 interface UserModelType {
   namespace: 'users';
   state: {};
@@ -8,6 +8,8 @@ interface UserModelType {
   };
   effects: {
     query: Effect;
+    save: Effect;
+    remove: Effect;
   };
   subscriptions: {
     onLoad: Subscription;
@@ -34,6 +36,17 @@ const UserModel: UserModelType = {
         type: 'setList',
         payload: data,
       });
+    },
+    *save({ payload }, { put, call }) {
+      console.log('save payload: ', payload);
+      const data = yield call(
+        save,
+        payload,
+      ); /** 注意这里的写法，不能直接调用方法 */
+    },
+    *remove({ payload }, { put, call }) {
+      console.log('to remove: ', payload);
+      yield call(remove, payload.id);
     },
   },
   subscriptions: {

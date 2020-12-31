@@ -1,5 +1,17 @@
 import { request } from 'umi';
 
+export const remove = async (id) =>
+  request(`/api/users/${id}`, {
+    method: 'delete',
+    params: { id },
+  });
+
+export const save = async (user) =>
+  request(`/api/users/${user.id}`, {
+    method: 'put',
+    data: { ...user },
+  });
+
 export const query = async () => {
   return request(
     '/api/users', // 代理在.umirc.ts中配置
