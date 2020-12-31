@@ -1,62 +1,53 @@
-import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
+import { Reducer, Effect, Subscription } from 'umi';
+import { query } from './service';
+interface UserModelType {
+  namespace: 'users';
+  state: {};
+  reducers: {
+    setList: Reducer;
+  };
+  effects: {
+    query: Effect;
+  };
+  subscriptions: {
+    onLoad: Subscription;
+  };
+}
 
-
-const UserModel = {
+const UserModel: UserModelType = {
   namespace: 'users',
-  state: {
-    name: '',
+  state: {},
+  reducers: {
+    setList(state, { type, payload }) {
+      console.log('payload: ', payload);
+      return {
+        ...state,
+        list: payload,
+      };
+    },
   },
   effects: {
-    *query({ payload }, { call, put }) {
+    *query({ type, payload }, { put, call }) {
+      const { data } = yield call(query); // 异步调用service
+      // yield put() 同步调用reducer
+      yield put({
+        type: 'setList',
+        payload: data,
+      });
     },
-  },
-  reducers: {
-    save(state, action) {
-
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
-      /* return {
-        ...state,
-        ...action.payload,
-      }; */
-      return data
-    },
-    // 启用 immer 之后
-    // save(state, action) {
-    //   state.name = action.payload;
-    // },
   },
   subscriptions: {
-    setup({ dispatch, history }) {
-      return history.listen(({ pathname }) => {
-        if (pathname === '/users') {
+    onLoad({ dispatch, history }, done) {
+      console.log('ROUTER: ', history);
+      return history.listen((location) => {
+        if (location.pathname === '/users') {
           dispatch({
-            type: 'save',
-          })
+            type: 'query',
+          });
         }
       });
-    }
-  }
+    },
+  },
 };
+
 export default UserModel;

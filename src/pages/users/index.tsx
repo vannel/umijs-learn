@@ -1,13 +1,17 @@
 import { Table, Tag, Space } from 'antd';
-import { connect } from 'umi'
+import { connect } from 'umi';
 
 const index = ({ users }) => {
   const columns = [
     {
+      title: '#',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a>{text}</a>,
     },
     {
       title: 'Age',
@@ -20,26 +24,6 @@ const index = ({ users }) => {
       key: 'address',
     },
     {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: tags => (
-        <>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
@@ -50,13 +34,15 @@ const index = ({ users }) => {
       ),
     },
   ];
-  
-    return (
-        <div className="list-table"><Table columns={columns} dataSource={users} /></div>
-    )
-}
+
+  return (
+    <div className="list-table">
+      <Table columns={columns} dataSource={users.list} />
+    </div>
+  );
+};
 
 const mapStateToProps = ({ users }) => {
-  return { users }
-}
-export default connect(mapStateToProps)(index)
+  return { users };
+};
+export default connect(mapStateToProps)(index);
