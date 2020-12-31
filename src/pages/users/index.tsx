@@ -5,10 +5,14 @@ import UserModal from './components/UserModal';
 
 const index = ({ users, dispatch }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [editingItem, setEditingItem] = useState(undefined);
+  const [editingItem, setEditingItem] = useState({});
   const handleOpenEdit = (item) => {
     setModalVisible(true);
     setEditingItem({ ...item });
+  };
+  const handleOpenAdd = () => {
+    setModalVisible(true);
+    setEditingItem({});
   };
   const handleClickRemove = async (item) => {
     console.log('item to delete', item);
@@ -21,15 +25,19 @@ const index = ({ users, dispatch }) => {
     });
   };
   const handleFormSubmit = async (formData) => {
-    await dispatch({
-      type: 'users/save',
-      payload: { ...editingItem, ...formData },
-    });
+    if (editingItem.id) {
+      await dispatch({
+        type: 'users/save',
+        payload: { ...editingItem, ...formData },
+      });
+    } else {
+      await dispatch({
+        type: 'users/add',
+        payload: { ...formData },
+      });
+    }
     setModalVisible(false);
     setEditingItem(undefined);
-    dispatch({
-      type: 'users/query',
-    });
   };
   const columns = [
     {
@@ -75,11 +83,17 @@ const index = ({ users, dispatch }) => {
 
   return (
     <div className="list-table">
+      <Button type="primary" onClick={handleOpenAdd}>
+        ADD
+      </Button>
       <Table columns={columns} dataSource={users.list} rowKey="id" />
       <UserModal
         formData={editingItem}
         visible={modalVisible}
-        onCancel={() => setModalVisible(false)}
+        onCancel={() => {
+          setModalVisible(false);
+          setEditingItem({});
+        }}
         onFormSubmit={handleFormSubmit}
       />
     </div>

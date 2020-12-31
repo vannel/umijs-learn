@@ -4,6 +4,10 @@ import { Modal, Button, Form, Input } from 'antd';
 const UserModal = (props) => {
   const [form] = Form.useForm();
   useEffect(() => {
+    if (!props.visible) {
+      // 关闭窗口时清空表单
+      form.resetFields();
+    }
     form.setFieldsValue(props.formData); /** 重要！在这里对表单进行赋值 */
   }, [props.visible]);
 

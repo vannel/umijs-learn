@@ -1,4 +1,5 @@
 import { request } from 'umi';
+import { message } from 'antd';
 
 export const remove = async (id) =>
   request(`/api/users/${id}`, {
@@ -6,11 +7,28 @@ export const remove = async (id) =>
     params: { id },
   });
 
+export const add = async (user) =>
+  request(`/api/users`, {
+    method: 'post',
+    data: { ...user },
+  })
+    .then((resp) => {
+      message.success('添加成功', 3000);
+    })
+    .catch((err) => {
+      message.error('添加失败', 3000);
+    });
 export const save = async (user) =>
   request(`/api/users/${user.id}`, {
     method: 'put',
     data: { ...user },
-  });
+  })
+    .then((resp) => {
+      message.success('保存成功', 3000);
+    })
+    .catch((err) => {
+      message.error('保存失败', 3000);
+    });
 
 export const query = async () => {
   return request(
