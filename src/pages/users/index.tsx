@@ -1,7 +1,10 @@
-import { Table, Tag, Space } from 'antd';
+import { useState } from 'react';
+import { Table, Tag, Space, Button, Modal } from 'antd';
 import { connect } from 'umi';
+import UserModal from './components/UserModal';
 
 const index = ({ users }) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const columns = [
     {
       title: '#',
@@ -28,7 +31,9 @@ const index = ({ users }) => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a>Invite {record.name}</a>
+          <Button type="primary" onClick={() => setModalVisible(true)}>
+            EDIT
+          </Button>
           <a>Delete</a>
         </Space>
       ),
@@ -38,6 +43,10 @@ const index = ({ users }) => {
   return (
     <div className="list-table">
       <Table columns={columns} dataSource={users.list} />
+      <UserModal
+        visible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+      />
     </div>
   );
 };
