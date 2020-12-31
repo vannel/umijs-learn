@@ -1,5 +1,13 @@
 import { Reducer, Effect, Subscription } from 'umi';
 import { query, save, remove, add } from './service';
+export interface User {
+  id: Number;
+  name: String;
+  email: String;
+  status: Number | String;
+  create_time: String;
+  update_time: String;
+}
 interface UserModelType {
   namespace: 'users';
   state: {};

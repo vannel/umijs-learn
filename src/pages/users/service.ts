@@ -1,13 +1,21 @@
 import { request } from 'umi';
 import { message } from 'antd';
+export interface User {
+  id: Number;
+  name: String;
+  email: String;
+  status: Number | String;
+  create_time: String;
+  update_time: String;
+}
 
-export const remove = async (id) =>
+export const remove = async (id: String|Number) =>
   request(`/api/users/${id}`, {
     method: 'delete',
     params: { id },
   });
 
-export const add = async (user) =>
+export const add = async (user: User) =>
   request(`/api/users`, {
     method: 'post',
     data: { ...user },
@@ -18,7 +26,7 @@ export const add = async (user) =>
     .catch((err) => {
       message.error('添加失败', 3000);
     });
-export const save = async (user) =>
+export const save = async (user: User) =>
   request(`/api/users/${user.id}`, {
     method: 'put',
     data: { ...user },

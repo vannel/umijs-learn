@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Modal, Button, Form, Input } from 'antd';
 
-const UserModal = (props) => {
+const UserModal = (props: any) => {
   const [form] = Form.useForm();
   useEffect(() => {
     if (!props.visible) {

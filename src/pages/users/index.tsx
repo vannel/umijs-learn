@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Table, Tag, Space, Button, Modal, Popconfirm } from 'antd';
 import { connect } from 'umi';
 import UserModal from './components/UserModal';
+import { User } from './service'
 
 const index = ({ users, dispatch }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editingItem, setEditingItem] = useState({});
-  const handleOpenEdit = (item) => {
+  const handleOpenEdit = (item: User) => {
     setModalVisible(true);
     setEditingItem({ ...item });
   };
@@ -14,7 +15,7 @@ const index = ({ users, dispatch }) => {
     setModalVisible(true);
     setEditingItem({});
   };
-  const handleClickRemove = async (item) => {
+  const handleClickRemove = async (item: User) => {
     console.log('item to delete', item);
     await dispatch({
       type: 'users/remove',
@@ -24,7 +25,7 @@ const index = ({ users, dispatch }) => {
       type: 'users/query',
     });
   };
-  const handleFormSubmit = async (formData) => {
+  const handleFormSubmit = async (formData: User) => {
     if (editingItem.id) {
       await dispatch({
         type: 'users/save',
@@ -37,7 +38,7 @@ const index = ({ users, dispatch }) => {
       });
     }
     setModalVisible(false);
-    setEditingItem(undefined);
+    setEditingItem({});
   };
   const columns = [
     {
